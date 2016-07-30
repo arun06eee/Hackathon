@@ -193,15 +193,7 @@ margin-bottom: 20px;
 
 #aboutus {
 	padding: 0;
-	/*	background-image: url(../img/cover/aboutus.jpg);
-	background-repeat: repeat;
-	background-position: center center;
-	background-size: cover;
-	background-color: #fff;
-	border-bottom: solid 1px #f5f5f5;
-	*/
 }
-
 
 #aboutus  .border{
 	background-color: #7e0f0f;
@@ -275,10 +267,7 @@ margin-bottom: 20px;
 	color: white;
 }
 
-#faq {
-	/*   background: url(../img/cover/faq.jpg);
-	background-repeat: repeat; */
-}
+#faq {}
 
 #faq,
 #faq a,
@@ -296,11 +285,6 @@ margin-bottom: 20px;
 	left: 0;
 	background: rgba(158, 158, 158, 0.01);
 	opacity: 1;	
-}
-
-.faq-list {
-	/*   max-width: 820px;
-	margin: 0 auto; */
 }
 
 .faq-list ul {
@@ -406,7 +390,6 @@ ul, li {
 	margin-left: -5px;
 	color: green;
 }
-
 
 .red {
 	color: #ff0000;
