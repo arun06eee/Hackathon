@@ -56,6 +56,7 @@ function initAnimations() {
 }
 
 $(document).ready(function () {
+
     initNavbar();
     initAnimations();
 /* 
@@ -91,20 +92,36 @@ $(document).ready(function () {
 				method: "POST",
 				data : storeData,
 				success: function(data) {
-					if(data.status == "Failed") {				
-						console.log(data);
-					}else if(data.status == "Success") {
+					if(data.status == "Success") {
 						$("#formSubmit input, #formSubmit select").each(function(){
 							$(this).val("");
 						});
 					}
+
+					$.notify({
+						title: data.message,
+					},{
+						type: 'pastel-info',
+						delay: 10000,
+						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+									'<span data-notify="title">{1}</span>' +
+								'</div>'
+					});
 				},
-				error: function(xhr){
-					
+				error: function (xhr, ajaxOptions, thrownError) {
+					$.notify({
+						title: xhr.status + " - " + thrownError,
+					},{
+						type: 'pastel-info',
+						delay: 5000,
+						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+									'<span data-notify="title">{1}</span>' +
+								'</div>'
+					});
 				}
 			})
 		}
-		
+
 		return false;
 	});
 });
