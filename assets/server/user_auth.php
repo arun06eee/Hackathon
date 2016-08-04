@@ -13,7 +13,7 @@ if(isset($_REQUEST) && isset($_POST)) {
 	$username = trim($_POST['username']);
 	$password = trim($_POST['password']);
 
-	$sql = "select * from zydehacks_user where username='$username' AND password='$password'";
+	$sql = "select * from zydehacks_user where username='$username' AND password='".md5($password)."'";
 
 	$data = $conn->query($sql);
 

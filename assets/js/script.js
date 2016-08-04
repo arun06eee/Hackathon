@@ -3,15 +3,15 @@ function initNavbar() {
     var scrollOffset = 50;
     var easing = 'swing';
 
-    $('#navbar-top .navbar-default ul.nav').onePageNav({
-        currentClass: 'active',
-        changeHash: false,
-        scrollSpeed: scrollSpeed,
-        scrollOffset: scrollOffset,
-        scrollThreshold: 0.5,
-        filter: ':not(.external)',
-        easing: easing
-    });
+	$('#navbar-top .navbar-default ul.nav').onePageNav({
+		currentClass: 'active',
+		changeHash: false,
+		scrollSpeed: scrollSpeed,
+		scrollOffset: scrollOffset,
+		scrollThreshold: 0.5,
+		filter: ':not(.external)',
+		easing: easing
+	});
 
     $('.nav-external').click(function (e) {
         e.preventDefault();
@@ -55,69 +55,93 @@ function initAnimations() {
 	});
 }
 
+function refreshCaptcha() {
+	var url= "./assets/server/captcha.php";
+	var img = document.images['captchaimg'];
+	img.src = url;
+}
+
 $(document).ready(function () {
 
     initNavbar();
     initAnimations();
-/* 
-	$(".faq-articles").click(function() {
-		$('.faq-articles').find(".faq-content").removeClass('animated active fadeInDown').css('display', 'none');
-		$(this).find(".faq-content").addClass('animated active fadeInDown').css('display', 'block');
-	}); */
 
 	$("#formSubmit").submit(function(e) {
 		e.preventDefault();
 		var bool = true;
+
 		var storeData = {};
-		$("#formSubmit input,#formSubmit select").each(function(){
-			$(this).parent().find("span").remove();
+		$("#formSubmit input, #formSubmit select").each(function(){
+			var id = $(this).attr("id");
+
+			$("label[for='"+id+"']").next('span').remove();
+
 			if($.trim($(this).val()) == "") {
 				bool = false;
-				$(this).parent().find("label").after( "<span class='fa fa-times red PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
+				$("label[for='"+id+"']").after( "<span class='yellow PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
 			}else {
-				if($(this).attr("id") == 'phonenumber'){
+				if(id == 'phonenumber'){
 					if(isNaN($(this).val()) || $(this).val().length != 10) {
 						bool = false;
-						$(this).parent().find("label").after( "<span class='fa fa-times red PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
+						$("label[for='"+id+"']").after( "<span class='yellow PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
+					}
+				}
+				
+				if(id == 'workexperience'){
+					if(isNaN($(this).val()) || $(this).val().length >= 3) {
+						bool = false;
+						$("label[for='"+id+"']").after( "<span class='yellow PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
 					}
 				}
 
-				storeData[$(this).attr("id")] = $(this).val();
+				storeData[id] = $(this).val();
 			}
 		});
 
-		if(bool == true){
+		if(bool == true) {
+			$("#formSubmit").hide();
+			$("#img_loader").show();
+
 			$.ajax({
 				url: "./assets/server/",
 				method: "POST",
 				data : storeData,
 				success: function(data) {
+
 					if(data.status == "Success") {
 						$("#formSubmit input, #formSubmit select").each(function(){
 							$(this).val("");
 						});
+						$("#errormsg_status").html("<u>Success !!!</u>");
+						$("#errormsg_display").removeClass("bggreen bgred").addClass("bggreen");
+					}else {
+						$("#errormsg_display").removeClass("bggreen bgred").addClass("bgred");
+						$("#errormsg_status").html("<u>Failed !!!</u>");
 					}
 
-					$.notify({
-						title: data.message,
-					},{
-						type: 'pastel-info',
-						delay: 10000,
-						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-									'<span data-notify="title">{1}</span>' +
-								'</div>'
-					});
+					$("#errormsg_message").html(data.message);
+					$("#errormsg_display").show();
+
+					setTimeout(function(){
+						$("#errormsg_display").hide();						
+					}, 5000);
+
+					$("#img_loader").hide();
+					$("#formSubmit").show();
+					refreshCaptcha();
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
-					$.notify({
-						title: xhr.status + " - " + thrownError,
-					},{
-						type: 'pastel-info',
-						delay: 5000,
-						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-									'<span data-notify="title">{1}</span>' +
-								'</div>'
-					});
+	
+					$("#errormsg_display").addClass("bgred");
+					$("#errormsg_status").html("<u>Failed !!!</u>");
+					$("#errormsg_message").html( xhr.status + " - " + thrownError);
+
+					$("#errormsg_display").show();
+
+					setTimeout(function(){
+						$("#errormsg_display").hide();						
+					}, 5000);
+					refreshCaptcha();
 				}
 			})
 		}
