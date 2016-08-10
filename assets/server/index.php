@@ -30,19 +30,19 @@ if(!empty($_REQUEST)&& !empty($_POST)) {
 			$sql = "INSERT INTO zydehacks_records (firstname, lastname, emailid, phonenumber, workexperience, city, technologiesknown, updated_dateTime)
 					VALUES ('$firstname', '$lastname', '$emailid', '$phonenumber', '$workexperience', '$city', '$technologiesknown', now())";
 
-			$querySql = "select * from zydehacks_records where emailid='$emailid' OR phonenumber='$phonenumber'";
+			$querySql = "select * from zydehacks_records where emailid='$emailid'";
 
 			$data = $conn->query($querySql);
 
 			if(!$data) {
 				$array['status'] = "Failed";
-				$array['message'] = "Unable to find Records";
+				$array['message'] = "The Email ID is already used. Please use a different one.";
 			} else {
 				$a = $data->num_rows;
 
 				if($a >= 1) {
 					$array['status'] = "Failed";
-					$array['message'] = "Already you have Register";			
+					$array['message'] = "The Email ID is already used. Please use a different one.";
 				}else {
 					$mail = new PHPMailer(true);
 					$mail->IsSMTP();

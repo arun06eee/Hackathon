@@ -474,6 +474,19 @@ ul, li {
 	border-bottom-left-radius: 0px;
 	border-top-left-radius: 0px;
 }
+
+.closeMessageBox {
+	font-family: 'open sans bold';
+	font-size: 24px;
+	opacity: 1;
+	color: #d01111;
+	line-height: 38px;
+	float: right;
+	padding-right: 10px;
+}
+#errormsg_display {
+	text-align: center;
+}
 /* Responsive style */
 @media screen and (max-width: 1024px) { 
 

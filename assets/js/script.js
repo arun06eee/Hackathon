@@ -65,6 +65,10 @@ $(document).ready(function () {
 
     initNavbar();
     initAnimations();
+	
+	$(".closeMessageBox").click(function(){
+		$("#errormsg_display").hide();
+	});
 
 	$("#formSubmit").submit(function(e) {
 		e.preventDefault();
@@ -86,7 +90,7 @@ $(document).ready(function () {
 						$("label[for='"+id+"']").after( "<span class='yellow PL-10'>&nbsp;&nbsp;"+$(this).attr("placeholder") + " is required.</span>" );
 					}
 				}
-				
+
 				if(id == 'workexperience'){
 					if(isNaN($(this).val()) || $(this).val().length >= 3) {
 						bool = false;
@@ -101,6 +105,7 @@ $(document).ready(function () {
 		if(bool == true) {
 			$("#formSubmit").hide();
 			$("#img_loader").show();
+			$("#errormsg_display").hide();
 
 			$.ajax({
 				url: "./assets/server/",
@@ -112,20 +117,15 @@ $(document).ready(function () {
 						$("#formSubmit input, #formSubmit select").each(function(){
 							$(this).val("");
 						});
-						$("#errormsg_status").html("<u>Success !!!</u>");
+						$("#errormsg_status").html("<u>Registration Success!!!</u>");
 						$("#errormsg_display").removeClass("bggreen bgred").addClass("bggreen");
 					}else {
 						$("#errormsg_display").removeClass("bggreen bgred").addClass("bgred");
-						$("#errormsg_status").html("<u>Failed !!!</u>");
+						$("#errormsg_status").html("<u>Registration failed!!!</u>");
 					}
 
 					$("#errormsg_message").html(data.message);
 					$("#errormsg_display").show();
-
-					setTimeout(function(){
-						$("#errormsg_display").hide();						
-					}, 5000);
-
 					$("#img_loader").hide();
 					$("#formSubmit").show();
 					refreshCaptcha();
@@ -133,17 +133,13 @@ $(document).ready(function () {
 				error: function (xhr, ajaxOptions, thrownError) {
 	
 					$("#errormsg_display").addClass("bgred");
-					$("#errormsg_status").html("<u>Failed !!!</u>");
+					$("#errormsg_status").html("<u>Registration failed!!!</u>");
 					$("#errormsg_message").html( xhr.status + " - " + thrownError);
 
 					$("#errormsg_display").show();
-
-					setTimeout(function(){
-						$("#errormsg_display").hide();						
-					}, 5000);
 					refreshCaptcha();
 				}
-			})
+			});
 		}
 
 		return false;
