@@ -26,9 +26,10 @@ if(!empty($_REQUEST)&& !empty($_POST)) {
 			$workexperience = trim($_POST['workexperience']);
 			$city = trim($_POST['city']);
 			$technologiesknown = trim($_POST['technologiesknown']);
+			$participatingstream = trim($_POST['participatingstream']);
 
-			$sql = "INSERT INTO zydehacks_records (firstname, lastname, emailid, phonenumber, workexperience, city, technologiesknown, updated_dateTime)
-					VALUES ('$firstname', '$lastname', '$emailid', '$phonenumber', '$workexperience', '$city', '$technologiesknown', now())";
+			$sql = "INSERT INTO zydehacks_records (firstname, lastname, emailid, phonenumber, workexperience, city, technologiesknown, participatingstream,updated_dateTime)
+					VALUES ('$firstname', '$lastname', '$emailid', '$phonenumber', '$workexperience', '$city', '$technologiesknown', '$participatingstream',now())";
 
 			$querySql = "select * from zydehacks_records where emailid='$emailid'";
 
